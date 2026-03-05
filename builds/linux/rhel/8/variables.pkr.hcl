@@ -114,7 +114,7 @@ variable "vm_guest_os_keyboard" {
 variable "vm_guest_os_timezone" {
   type        = string
   description = "The guest operating system timezone."
-  default     = "UTC"
+  default     = "Asia/Shanghai"
 }
 
 variable "vm_guest_os_family" {
