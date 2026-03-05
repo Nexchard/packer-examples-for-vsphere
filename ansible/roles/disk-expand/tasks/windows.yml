@@ -1,0 +1,38 @@
+---
+# Microsoft Windows specific tasks for disk expansion.
+
+# Task for creating the AutoExpand.ps1 script for disk expansion
+- name: Create Scripts directory
+  ansible.windows.win_file:
+    path: C:\Scripts
+    state: directory
+
+- name: Copy AutoExpand.ps1 script
+  ansible.windows.win_copy:
+    src: AutoExpand.ps1
+    dest: C:\Scripts\AutoExpand.ps1
+
+- name: Create scheduled task for disk expansion
+  ansible.windows.win_powershell:
+    script: |
+      # Check if the scheduled task already exists
+      $taskExists = Get-ScheduledTask | Where-Object {$_.TaskName -eq "AutoDiskExpansion"}
+
+      if ($taskExists) {
+        Unregister-ScheduledTask -TaskName "AutoDiskExpansion" -Confirm:$false
+      }
+
+      # Create a scheduled task action
+      $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Scripts\AutoExpand.ps1"
+
+      # Create a scheduled task trigger for system startup (not user login)
+      $trigger = New-ScheduledTaskTrigger -AtStartup
+
+      # Create scheduled task settings - configure for system account
+      $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -RunOnlyIfNetworkAvailable -WakeToRun
+
+      # Create principal for SYSTEM account (does not require user login)
+      $principal = New-ScheduledTaskPrincipal -UserId "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+
+      # Register the scheduled task with SYSTEM principal
+      Register-ScheduledTask -TaskName "AutoDiskExpansion" -Action $action -Trigger $trigger -Settings $settings -Principal $principal

@@ -27,6 +27,26 @@
     regexp: ^D
     replace: "#D"
 
+# Task for setting predictable network interface names to traditional naming (eth0, etc.)
+- name: Check if GRUB configuration line exists
+  ansible.builtin.shell: grep -E '^GRUB_CMDLINE_LINUX=.*net.ifnames.*biosdevname' /etc/default/grub || echo "not found"
+  register: grub_check
+  ignore_errors: true
+  changed_when: false
+
+# Task for adding kernel parameters to disable predictable network interface naming
+- name: Configure GRUB to use traditional network interface names
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX='
+    line: 'GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"'
+  when: "'net.ifnames' not in grub_check.stdout"
+
+# Update GRUB if configuration was changed
+- name: Update GRUB configuration
+  ansible.builtin.command: update-grub
+  when: "'net.ifnames' not in grub_check.stdout"
+
 # Tasks for configuring cloud-init.
 - name: Configuring cloud-init.
   when: enable_cloudinit == 'true'
@@ -41,7 +61,9 @@
       loop:
         - /etc/cloud/cloud.cfg.d/subiquity-disable-cloudinit-networking.cfg
         - /etc/cloud/cloud.cfg.d/99-installer.cfg
+        - /etc/cloud/cloud.cfg.d/90-installer-network.cfg
         - /etc/netplan/00-installer-config.yaml
+        - /etc/netplan/50-cloud-init.yaml
       when: ansible_distribution == 'Ubuntu'
     - name: Ensure disable_vmware_customization is set to false in cloud.cfg
       ansible.builtin.blockinfile:
@@ -58,6 +80,7 @@
       become_method: sudo
       become_user: root
       when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version | int >= 24
+  when: enable_cloudinit == 'true'
 
 - name: Replacing dhcp with static for Debian
   ansible.builtin.lineinfile:
@@ -84,7 +107,7 @@
     path: /etc/vmware-tools/tools.conf
     block: |
       [guestosinfo]
-      short-name = other5xLinux64Guest
+      short-name = other4xLinux64Guest
     create: true
     mode: "0644"
   when: ansible_distribution == 'Debian'

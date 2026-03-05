@@ -4,7 +4,7 @@
 
 /*
     DESCRIPTION:
-    Rocky Linux 9 build definition.
+    Rocky Linux 10 build definition.
     Packer Plugin for VMware vSphere: 'vsphere-iso' builder.
 */
 

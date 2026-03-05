@@ -1,0 +1,8 @@
+---
+- name: Manage administrator passwords
+  ansible.builtin.include_tasks: "{{ ansible_os_family | lower }}.yml"
+  when: ansible_os_family in ['Debian', 'RedHat', 'Suse'] or ansible_distribution == 'VMware Photon OS'
+
+- name: Manage administrator passwords for Windows
+  ansible.builtin.include_tasks: windows.yml
+  when: ansible_os_family == "Windows"

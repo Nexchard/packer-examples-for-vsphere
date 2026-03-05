@@ -1,5 +1,5 @@
 # © Broadcom. All Rights Reserved.
-# The term “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
+# The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 # SPDX-License-Identifier: BSD-2-Clause
 
 <#
@@ -32,3 +32,18 @@ netsh advfirewall firewall set rule name="Windows Remote Management (HTTP-In)" n
 # Reset the autologon count.
 # Reference: https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-autologon-logoncount#logoncount-known-issue
 Set-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon' -Name AutoLogonCount -Value 0
+
+# Set timezone to China Standard Time (UTC+8)
+Write-Output 'Setting timezone to China Standard Time (UTC+8)...'
+Set-TimeZone -Id "China Standard Time"
+
+# Enable Telnet Client
+Write-Output 'Enabling Telnet Client...'
+Enable-WindowsOptionalFeature -Online -FeatureName TelnetClient -All
+
+# Remove Azure Arc Setup feature if present
+$azureArcFeature = Get-WindowsFeature -Name AzureArcSetup
+if ($azureArcFeature.Installed) {
+    Write-Output 'Removing Azure Arc Setup feature...'
+    Remove-WindowsFeature -Name AzureArcSetup
+}

@@ -15,16 +15,16 @@ packer {
   required_version = ">= 1.12.0"
   required_plugins {
     vsphere = {
-      source  = "github.com/vmware/vsphere"
-      version = ">= 2.0.0"
+      source  = "github.com/hashicorp/vsphere"
+      version = ">= 1.4.2"
     }
     git = {
       source  = "github.com/ethanmdavidson/git"
-      version = ">= 0.6.5"
+      version = ">= 0.6.3"
     }
     ansible = {
       source  = "github.com/hashicorp/ansible"
-      version = ">= 1.1.4"
+      version = ">= 1.1.2"
     }
   }
 }
@@ -51,10 +51,10 @@ locals {
   manifest_path              = "${path.cwd}/manifests/"
   manifest_output            = "${local.manifest_path}${local.manifest_date}.json"
   ovf_export_path            = "${path.cwd}/artifacts/"
-  vm_name_datacenter_core    = "${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}-${var.vm_guest_os_edition_datacenter}-${var.vm_guest_os_experience_core}-${local.build_version}"
-  vm_name_datacenter_desktop = "${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}-${var.vm_guest_os_edition_datacenter}-${var.vm_guest_os_experience_desktop}-${local.build_version}"
-  vm_name_standard_core      = "${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}-${var.vm_guest_os_edition_standard}-${var.vm_guest_os_experience_core}-${local.build_version}"
-  vm_name_standard_desktop   = "${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}-${var.vm_guest_os_edition_standard}-${var.vm_guest_os_experience_desktop}-${local.build_version}"
+  vm_name_datacenter_core    = "${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}-${var.vm_guest_os_edition_datacenter}-${var.vm_guest_os_experience_core}"
+  vm_name_datacenter_desktop = "${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}-${var.vm_guest_os_edition_datacenter}-${var.vm_guest_os_experience_desktop}"
+  vm_name_standard_core      = "${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}-${var.vm_guest_os_edition_standard}-${var.vm_guest_os_experience_core}"
+  vm_name_standard_desktop   = "${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}-${var.vm_guest_os_edition_standard}-${var.vm_guest_os_experience_desktop}"
   bucket_name                = replace("${var.vm_guest_os_family}-${var.vm_guest_os_name}-${var.vm_guest_os_version}", ".", "")
   bucket_description         = "${var.vm_guest_os_family} ${var.vm_guest_os_name} ${var.vm_guest_os_version}"
 }
@@ -159,9 +159,8 @@ source "vsphere-iso" "windows-server-standard-core" {
   dynamic "export" {
     for_each = var.common_ovf_export_enabled ? [1] : []
     content {
-      name        = local.vm_name_standard_core
-      force       = var.common_ovf_export_overwrite
-      image_files = var.common_ovf_export_image_files
+      name  = local.vm_name_standard_core
+      force = var.common_ovf_export_overwrite
       options = [
         "extraconfig"
       ]
@@ -268,9 +267,8 @@ source "vsphere-iso" "windows-server-standard-dexp" {
   dynamic "export" {
     for_each = var.common_ovf_export_enabled ? [1] : []
     content {
-      name        = local.vm_name_standard_desktop
-      force       = var.common_ovf_export_overwrite
-      image_files = var.common_ovf_export_image_files
+      name  = local.vm_name_standard_desktop
+      force = var.common_ovf_export_overwrite
       options = [
         "extraconfig"
       ]
@@ -379,9 +377,8 @@ source "vsphere-iso" "windows-server-datacenter-core" {
   dynamic "export" {
     for_each = var.common_ovf_export_enabled ? [1] : []
     content {
-      name        = local.vm_name_datacenter_core
-      force       = var.common_ovf_export_overwrite
-      image_files = var.common_ovf_export_image_files
+      name  = local.vm_name_datacenter_core
+      force = var.common_ovf_export_overwrite
       options = [
         "extraconfig"
       ]
@@ -488,9 +485,8 @@ source "vsphere-iso" "windows-server-datacenter-dexp" {
   dynamic "export" {
     for_each = var.common_ovf_export_enabled ? [1] : []
     content {
-      name        = local.vm_name_datacenter_desktop
-      force       = var.common_ovf_export_overwrite
-      image_files = var.common_ovf_export_image_files
+      name  = local.vm_name_datacenter_desktop
+      force = var.common_ovf_export_overwrite
       options = [
         "extraconfig"
       ]
@@ -504,9 +500,9 @@ source "vsphere-iso" "windows-server-datacenter-dexp" {
 
 build {
   sources = [
-    "source.vsphere-iso.windows-server-standard-core",
+    //"source.vsphere-iso.windows-server-standard-core",
     "source.vsphere-iso.windows-server-standard-dexp",
-    "source.vsphere-iso.windows-server-datacenter-core",
+    //"source.vsphere-iso.windows-server-datacenter-core",
     "source.vsphere-iso.windows-server-datacenter-dexp"
   ]
 

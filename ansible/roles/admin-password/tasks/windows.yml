@@ -1,0 +1,12 @@
+---
+# Microsoft Windows specific tasks for managing admin password.
+
+- name: Set Administrator password
+  ansible.windows.win_user:
+    name: Administrator
+    password: "P@ssword123"
+    update_password: always
+    state: present
+    password_never_expires: true
+  when:
+    - admin_password_set | default(true)

@@ -4,22 +4,21 @@
 
 /*
     DESCRIPTION:
-    Oracle Linux 9 build variables.
+    Rocky Linux 10 build variables.
     Packer Plugin for VMware vSphere: 'vsphere-iso' builder.
 */
 
 // Guest Operating System Metadata
-vm_guest_os_name    = "oracle"
-vm_guest_os_version = "9.7"
+vm_guest_os_name    = "rocky"
+vm_guest_os_version = "10.0"
 
 // Virtual Machine Guest Operating System Setting
 vm_guest_os_type = "other4xLinux64Guest"
 
 // Virtual Machine Hardware Settings
-vm_firmware = "efi-secure"
+vm_firmware = "efi"
 
 // Removable Media Settings
-iso_datastore_path       = "iso/linux/oracle-linux/9/amd64"
-iso_content_library_item = "OracleLinux-R9-U7-x86_64-dvd"
-iso_file                  = "OracleLinux-R9-U7-x86_64-dvd.iso"
-
+iso_datastore_path       = "iso/linux/rocky-linux/10/amd64"
+iso_content_library_item = "Rocky-10-latest-x86_64-dvd"
+iso_file                  = "Rocky-10-latest-x86_64-dvd.iso"

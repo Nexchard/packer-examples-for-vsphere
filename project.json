@@ -239,7 +239,33 @@
                         "name": "Rocky Linux",
                         "url": "https://rockylinux.org"
                     },
+
                     "versions": {
+                        "10": [
+                            {
+                                "version": "10",
+                                "enabled": "true",
+                                "architectures": [
+                                    {
+                                        "architecture": "amd64",
+                                        "download_link": "https://download.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10-latest-x86_64-dvd.iso",
+                                        "checksum_algorithm": "sha256",
+                                        "checksum": "https://download.rockylinux.org/pub/rocky/10/isos/x86_64/Rocky-10-latest-x86_64-dvd.iso.CHECKSUM"
+                                    }
+                                ],
+                                "build_files": [
+                                    {
+                                        "vsphere": "vsphere.pkrvars.hcl",
+                                        "build": "build.pkrvars.hcl",
+                                        "ansible": "ansible.pkrvars.hcl",
+                                        "proxy": "proxy.pkrvars.hcl",
+                                        "common": "common.pkrvars.hcl",
+                                        "network": "network.pkrvars.hcl",
+                                        "storage": "linux-storage.pkrvars.hcl"
+                                    }
+                                ]
+                            }
+                        ],
                         "9": [
                             {
                                 "version": "9",

@@ -9,7 +9,7 @@
 */
 
 // Virtual Machine Settings
-common_vm_version           = 21
+common_vm_version           = 17
 common_tools_upgrade_policy = true
 common_remove_cdrom         = true
 

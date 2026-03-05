@@ -4,7 +4,7 @@
 
 /*
     DESCRIPTION:
-    Ubuntu Server 24.04 LTS network variables.
+    Rocky Linux 10 network variables.
     Packer Plugin for VMware vSphere: 'vsphere-iso' builder.
 */
 

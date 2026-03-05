@@ -144,7 +144,7 @@ source "vsphere-iso" "linux-ubuntu" {
     // This types a command to load the Linux kernel from the specified path with the 'autoinstall' option and the value of the 'data_source_command' local variable.
     // The 'autoinstall' option is used to automate the installation process.
     // The 'data_source_command' local variable is used to specify the kickstart data source configured in the common variables.
-    "linux /casper/vmlinuz --- autoinstall ${local.data_source_command}",
+    "linux /casper/vmlinuz --- autoinstall ${local.data_source_command} net.ifnames=0 biosdevname=0 ip=172.17.124.192::172.17.124.1:255.255.255.0::eth0:off",
     // This sends the "enter" key and then waits. This is typically used to execute the command and give the system time to process it.
     "<enter><wait>",
     // This types a command to load the initial RAM disk from the specified path.

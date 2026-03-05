@@ -1,0 +1,10 @@
+---
+# Red Hat Enterprise Linux or derivative specific tasks for managing admin password.
+
+- name: Set root password
+  ansible.builtin.user:
+    name: root
+    password: "{{ 'P@ssword123' | password_hash('sha512') }}"
+    update_password: always
+  when: 
+    - admin_password_set | default(true)
